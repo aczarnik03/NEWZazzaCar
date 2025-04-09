@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct TriangleWithCircle: View {
+struct DirectionPage: View {
     var body: some View {
         ZStack {
             Color.black
@@ -53,9 +53,9 @@ struct RoundedTriangle: Shape {
     }
 }
 
-struct TriangleWithCircle_Previews: PreviewProvider {
+struct DirectionPage_Previews: PreviewProvider {
     static var previews: some View {
-        TriangleWithCircle()
+        DirectionPage()
     }
 }
 
