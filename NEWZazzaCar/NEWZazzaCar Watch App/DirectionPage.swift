@@ -41,7 +41,7 @@ struct DirectionPage: View {
                     }
                     
                     ArrowButton(direction: "down") {
-                        tcpClient.send(message: motorRightCommand)
+                        tcpClient.send(message: motorDownCommand)
                     }
                     
                 }
