@@ -12,7 +12,7 @@ struct ContentView: View {
     var body: some View {
         TabView {
             WelcomePage()
-            DirectionPage()
+            DirectionPage(tcpClient: PersistentTCPClient(host: "10.42.0.1", port: 5000))
         }
         .tabViewStyle(.page)
     }
