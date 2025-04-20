@@ -13,8 +13,8 @@ struct DirectionPage: View {
     
     let motorUpCommand = "CMD_M_MOTOR#180#1500#0#0"
     let motorDownCommand = "CMD_M_MOTOR#0#1500#0#0"
-    let motorLeftCommand = "CMD_M_MOTOR#0#0#90#1500"
-    let motorRightCommand = "CMD_M_MOTOR#0#0#-90#1500"
+    let motorLeftCommand = "CMD_M_MOTOR#0#0#-90#1500"
+    let motorRightCommand = "CMD_M_MOTOR#0#0#90#1500"
     let motorStopCommand = "CMD_M_MOTOR#0#0#0#0"
     
         
@@ -25,24 +25,32 @@ struct DirectionPage: View {
                 
                 VStack(spacing: 3) {
                     
-                    ArrowButton(direction: "up") {
+                    ArrowButton(direction: "up", onPressed: {
                         tcpClient.send(message: motorUpCommand)
-                    }
+                    }, onReleased: {
+                        tcpClient.send(message: motorStopCommand)
+                    })
                     
                     HStack(spacing: 3) {
-                        ArrowButton(direction: "left") {
+                        ArrowButton(direction: "left", onPressed: {
                             tcpClient.send(message: motorLeftCommand)
-                        }
+                        }, onReleased: {
+                            tcpClient.send(message: motorStopCommand)
+                        })
                         
-                        ArrowButton(direction: "right") {
+                        ArrowButton(direction: "right", onPressed: {
                             tcpClient.send(message: motorRightCommand)
-                        }
+                        }, onReleased: {
+                            tcpClient.send(message: motorStopCommand)
+                        })
                         
                     }
                     
-                    ArrowButton(direction: "down") {
+                    ArrowButton(direction: "down", onPressed: {
                         tcpClient.send(message: motorDownCommand)
-                    }
+                    }, onReleased: {
+                        tcpClient.send(message: motorStopCommand)
+                    })
                     
                 }
                 
@@ -56,7 +64,7 @@ struct DirectionPage: View {
     }
 }
 
-func ArrowButton(direction: String, action: @escaping () -> Void) -> some View {
+func ArrowButton(direction: String, onPressed: @escaping () -> Void, onReleased: @escaping () -> Void) -> some View {
     let rotation: Angle
     switch direction {
     case "up": rotation = .degrees(0)
@@ -72,7 +80,7 @@ func ArrowButton(direction: String, action: @escaping () -> Void) -> some View {
     let r = (direction == "left" || direction == "right") ? 20 : 50
 
     
-    return Button(action: action) {
+    return ZStack {
         Image(systemName: "triangle.fill")
             .resizable()
             .scaledToFit()
@@ -82,8 +90,16 @@ func ArrowButton(direction: String, action: @escaping () -> Void) -> some View {
             .frame(width: CGFloat(w), height: CGFloat(h))
             .background(Color.green)
             .cornerRadius(CGFloat(r))
+            .gesture(
+                DragGesture(minimumDistance: 0)
+                    .onChanged { _ in
+                        onPressed()
+                    }
+                    .onEnded { _ in
+                        onReleased()
+                    }
+            )
     }
-    .buttonStyle(PlainButtonStyle())
 }
     
 
