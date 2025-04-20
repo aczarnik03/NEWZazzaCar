@@ -11,12 +11,14 @@ import SwiftUI
 @main
 
 struct ZazzaCar: App {
+    
+    @StateObject private var tcpClient = PersistentTCPClient(host: "10.42.0.1", port: 5000)
 
     var body: some Scene {
 
         WindowGroup {
 
-                ContentView()
+            ContentView(tcpClient: tcpClient)
 
             }
 
