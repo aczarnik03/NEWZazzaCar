@@ -9,10 +9,13 @@ import SwiftUI
 
 
 struct ContentView: View {
+    
+    @ObservedObject var tcpClient: PersistentTCPClient
+    
     var body: some View {
         TabView {
-            WelcomePage()
-            DirectionPage(tcpClient: PersistentTCPClient(host: "10.42.0.1", port: 5000))
+            WelcomePage(tcpClient: tcpClient)
+            DirectionPage(tcpClient: tcpClient)
         }
         .tabViewStyle(.page)
     }
@@ -20,5 +23,5 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView()
+    ContentView(tcpClient: PersistentTCPClient(host: "10.42.0.1", port: 5000))
 }
